@@ -5,63 +5,84 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        NationalBank nb = new NationalBank();
-        SecondTierBank stb = new SecondTierBank();
-        Scanner sc = new Scanner(System.in);
+
+        Scanner sc=new Scanner(System.in);
+        String title, author, isbn;
+        int year, quantity;
+        String name, surname, group;
+        String id;
+        Library l=new Library();
+
         int choice = -1;
-        double money;
-        int duration;
-        int client;
 
         while (choice != 0) {
-            System.out.println("Press 1 to calculate deposit in National Bank");
-            System.out.println("Press 2 to calculate deposit in Second Tier Bank");
-            System.out.println("Press 3 to calculate credit in National Bank");
-            System.out.println("Press 4 to calculate credit in Second Tier Bank");
-            System.out.println("Press 0 to exit");
+            System.out.println("Welcome to the AITU Library");
+            System.out.println("1. Add book");
+            System.out.println("2. Add student");
+            System.out.println("3. Give book to student");
+            System.out.println("4. Return book from student");
+            System.out.println("5. Print books information");
+            System.out.println("6. Print students information");
+            System.out.println("7. Print student's books");
+            System.out.println("0. Exit");
+
             choice = sc.nextInt();
             sc.nextLine();
             switch (choice) {
-                case 1 -> {
-                    System.out.println("Press money (example:4,5):");
-                    money = sc.nextDouble();
-                    System.out.println("Press duration(in months): ");
-                    duration = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("If you are Legal Entities press 1 and if Individuals press 2");
-                    client = sc.nextInt();
-                    System.out.println(nb.deposit(money, duration, client));
-                }
-                case 2 -> {
-                    System.out.println("Press money (example:4,5):");
-                    money = sc.nextDouble();
-                    System.out.println("Press duration(in months): ");
-                    duration = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("If you are Legal Entities press 1 and if Individuals press 2");
-                    client = sc.nextInt();
-                    System.out.println(stb.deposit(money, duration, client));
-                }
-                case 3 -> {
-                    System.out.println("Press money (example:4,5):");
-                    money = sc.nextDouble();
-                    System.out.println("Press duration(in months): ");
-                    duration = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("If you are Legal Entities press 1 and if Individuals press 2");
-                    client = sc.nextInt();
-                    System.out.println(nb.credit(money, duration, client));
-                }
-                case 4 -> {
-                    System.out.println("Press money (example:4,5):");
-                    money = sc.nextDouble();
-                    System.out.println("Press duration(in months): ");
-                    duration = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("If you are Legal Entities press 1 and if Individuals press 2");
-                    client = sc.nextInt();
-                    System.out.println(stb.credit(money, duration, client));
-                }
+                case 1:
+                    System.out.println("String title, String author, String isbn, int year, int quantity");
+                    title=sc.nextLine();
+                    author=sc.nextLine();
+                    isbn=sc.nextLine();
+                    year=sc.nextInt();
+                    quantity=sc.nextInt();
+                    Book b = new Book(title, author, isbn, year, quantity);
+                    try {
+                        l.addBook(b);
+                    } catch (NullPointerException dat){
+                        System.out.println(dat.getMessage());
+                    } catch (IsbnExistsException ken){
+                        System.out.println(ken.getMessage());
+                    }
+                    break;
+                case 2:
+                    System.out.println("String name, String surname, String group, String id");
+                    name=sc.nextLine();
+                    surname=sc.nextLine();
+                    group=sc.nextLine();
+                    id=sc.nextLine();
+                    Student s = new Student(name, surname, group, id);
+                    try {
+                        l.addStudent(s);
+                    } catch (NullPointerException bag){
+                        System.out.println(bag.getMessage());
+                    } catch (IdExistsException mar){
+                        System.out.println(mar.getMessage());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Enter id and isbn");
+                    id =sc.nextLine();
+                    isbn=sc.nextLine();
+                    l.addBookToStudent(id, isbn);
+                    break;
+                case 4:
+                    System.out.println("Enter id and isbn");
+                    id =sc.nextLine();
+                    isbn=sc.nextLine();
+                    l.returnBookFromStudent(id, isbn);
+                    break;
+                case 5:
+                    l.printBooksInformation();
+                    break;
+                case 6:
+                    l.printStudentsInformation();
+                    break;
+                case 7:
+                    System.out.println("Enter id");
+                    id=sc.nextLine();
+                    l.printStudentsBooks(id);
+                    break;
             }
         }
     }
